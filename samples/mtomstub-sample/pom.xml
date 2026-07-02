@@ -20,9 +20,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.apache.axis</groupId>
+        <groupId>io.github.gferrariuy</groupId>
         <artifactId>samples</artifactId>
-        <version>1.4.1-SNAPSHOT</version>
+        <version>1.4.1.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mtomstub-sample</artifactId>
@@ -75,8 +75,8 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>

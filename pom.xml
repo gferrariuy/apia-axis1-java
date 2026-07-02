@@ -24,43 +24,45 @@
         <artifactId>apache</artifactId>
         <version>9</version>
     </parent>
-    <groupId>org.apache.axis</groupId>
-    <artifactId>axis-project</artifactId>
+    <groupId>io.github.gferrariuy</groupId>
+    <artifactId>axis1-maintained-project</artifactId>
     <name>Axis</name>
-    <version>1.4.1-SNAPSHOT</version>
+    <description>Maintained fork of Apache Axis 1.x with compatible org.apache.axis packages and updated Maven coordinates.</description>
+    <version>1.4.1.1</version>
     <packaging>pom</packaging>
     <url>${baseUrl}/</url>
-    <issueManagement>
-        <system>jira</system>
-        <url>http://issues.apache.org/jira/browse/AXIS</url>
-    </issueManagement>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>gferrariuy</id>
+            <name>Gustavo Ferrari</name>
+            <url>https://github.com/gferrariuy</url>
+        </developer>
+    </developers>
+
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/axis/axis1/java/trunk</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/axis/axis1/java/trunk</developerConnection>
-        <url>http://svn.apache.org/viewvc/axis/axis1/java/trunk</url>
+        <connection>scm:git:https://github.com/gferrariuy/apia-axis1-java.git</connection>
+        <developerConnection>scm:git:git@github.com:gferrariuy/apia-axis1-java.git</developerConnection>
+        <url>https://github.com/gferrariuy/apia-axis1-java</url>
     </scm>
-    <mailingLists>
-        <mailingList>
-            <name>Developer List</name>
-            <subscribe>java-dev-subscribe@axis.apache.org</subscribe>
-            <unsubscribe>java-dev-unsubscribe@axis.apache.org</unsubscribe>
-            <post>java-dev@axis.apache.org</post>
-            <archive>http://mail-archives.apache.org/mod_mbox/axis-java-dev/</archive>
-        </mailingList>
-        <mailingList>
-            <name>User List</name>
-            <subscribe>axis1-java-user-subscribe@axis.apache.org</subscribe>
-            <unsubscribe>axis1-java-user-unsubscribe@axis.apache.org</unsubscribe>
-            <post>axis1-java-user@axis.apache.org</post>
-            <archive>http://mail-archives.apache.org/mod_mbox/axis-axis1-java-user/</archive>
-        </mailingList>
-    </mailingLists>
-    <inceptionYear>2000</inceptionYear>
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/gferrariuy/apia-axis1-java/issues</url>
+    </issueManagement>
+    
+    <inceptionYear>2026</inceptionYear>
     <modules>
         <module>apidocs</module>
         <module>axis</module>
         <module>axis-ant</module>
         <module>axis-codegen</module>
+        <module>axis-saaj</module>
         <module>axis-jaxrpc</module>
         <module>axis-model</module>
         <module>axis-rt-compat</module>
@@ -75,7 +77,6 @@
         <module>axis-rt-transport-http-javanet</module>
         <module>axis-rt-transport-jms</module>
         <module>axis-rt-transport-mail</module>
-        <module>axis-saaj</module>
         <module>axis-standalone-server</module>
         <module>axis-testutils</module>
         <module>axis-tools</module>
@@ -192,7 +193,11 @@
                     <version>3.0.0</version>
                     <configuration>
                         <detectOfflineLinks>false</detectOfflineLinks>
-                        <source>${javaVersion}</source>
+                        <source>${maven.compiler.source}</source>
+                        <doclint>none</doclint>
+                        <additionalOptions>
+                            <additionalOption>-Xdoclint:none</additionalOption>
+                        </additionalOptions>
                         <quiet>true</quiet>
                     </configuration>
                 </plugin>
@@ -317,8 +322,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <source>${javaVersion}</source>
-                    <target>${javaVersion}</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -327,6 +332,7 @@
                 <version>0.8.2</version>
                 <executions>
                     <execution>
+                        <phase>none</phase>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
@@ -339,6 +345,7 @@
                 <version>0.1.1</version>
                 <executions>
                     <execution>
+                        <phase>none</phase>
                         <goals>
                             <goal>process</goal>
                         </goals>
@@ -387,6 +394,26 @@
                 </executions>
                 <configuration>
                     <attach>true</attach>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>javadoc-jars</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.11.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
                 </configuration>
             </plugin>
             <plugin>
@@ -461,6 +488,26 @@
             </build>
         </profile>
         <profile>
+            <id>central-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.8</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <!-- Profile to generate Eclipse project metadata -->
             <id>eclipse</id>
             <properties>
@@ -516,8 +563,10 @@
     </reporting>
     <properties>
         <javaVersion>1.4</javaVersion>
-        <baseUrl>http://axis.apache.org/axis/java</baseUrl>
-        <baseSiteUrl>scm:svn:https://svn.apache.org/repos/asf/axis/site/axis/java</baseSiteUrl>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <baseUrl>https://github.com/gferrariuy/apia-axis1-java</baseUrl>
+        <baseSiteUrl>scm:git:git@github.com:gferrariuy/apia-axis1-java.git</baseSiteUrl>
     </properties>
     <distributionManagement>
         <site>

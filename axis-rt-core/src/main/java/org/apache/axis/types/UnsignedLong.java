@@ -100,9 +100,12 @@ public class UnsignedLong extends java.lang.Number
 
     // implement java.lang.comparable interface
     public int compareTo(Object obj) {
-        if (lValue != null)
-            return lValue.compareTo(obj);
-        else if (equals(obj) == true)
+        if (lValue != null) {
+            BigInteger otherValue = (obj instanceof UnsignedLong)
+                    ? ((UnsignedLong)obj).lValue
+                    : (BigInteger)obj;
+            return lValue.compareTo(otherValue);
+        } else if (equals(obj) == true)
             return 0;  // null == null
         else
             return 1;  // object is greater

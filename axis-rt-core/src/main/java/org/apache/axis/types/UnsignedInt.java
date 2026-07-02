@@ -106,9 +106,12 @@ public class UnsignedInt extends java.lang.Number implements java.lang.Comparabl
 
     // implement java.lang.comparable interface
     public int compareTo(Object obj) {
-      if (lValue != null)
-        return lValue.compareTo(obj);
-      else
+      if (lValue != null) {
+        Long otherValue = (obj instanceof UnsignedInt)
+                ? ((UnsignedInt)obj).lValue
+                : (Long)obj;
+        return lValue.compareTo(otherValue);
+      } else
         if (equals(obj) == true)
             return 0;  // null == null
         else
