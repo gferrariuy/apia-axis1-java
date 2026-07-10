@@ -10,3 +10,47 @@ Thanks from all of us on the Axis team for downloading the package; help
 us make it better by sending comments to axis-user@ws.apache.org.
 
 
+Internally patched Axis 1.4 build
+---------------------------------
+
+This repository contains an internally patched Axis 1.4 build. The
+patched delivery artifact is:
+
+    axis/target/axis-1.4-statum-p1.jar
+
+OWASP Dependency-Check identifies dependencies using artifact names,
+coordinates and CPE metadata. Because this patched artifact remains
+compatible with Axis 1.4, Dependency-Check may still report CVEs that
+apply to the original Axis 1.4 distribution.
+
+When delivering the patched JAR to a client, include these files:
+
+    axis-1.4-statum-p1.jar
+    dependency-check-suppressions.xml
+    docs/security/axis-1.4-patched.md
+
+The suppression file does not disable analysis for Axis in general. It
+only suppresses the CVEs explicitly evaluated for this patched build.
+The technical evidence and rationale are documented in:
+
+    docs/security/axis-1.4-patched.md
+
+To run OWASP Dependency-Check with the supplied suppressions, place
+dependency-check-suppressions.xml next to the POM or verification script
+used by the client and execute:
+
+    mvn org.owasp:dependency-check-maven:12.1.9:check "-DsuppressionFiles=dependency-check-suppressions.xml"
+
+If the client uses a dedicated verification POM, for example
+pom-check.xml, run:
+
+    mvn -f pom-check.xml org.owasp:dependency-check-maven:12.1.9:check "-DsuppressionFiles=dependency-check-suppressions.xml"
+
+Alternatively, create a .mvn/maven.config file in the verification
+directory with this content:
+
+    -DsuppressionFiles=dependency-check-suppressions.xml
+
+Then the regular Dependency-Check command will automatically use the
+suppression file without hard-coded local paths.
+

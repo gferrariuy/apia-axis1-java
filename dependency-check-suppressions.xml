@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.4.xsd"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.4.xsd
+                                  https://dependency-check.github.io/DependencyCheck/dependency-suppression.1.4.xsd">
+    <suppress>
+        <notes><![CDATA[
+        Axis 1.4 fue parcheado internamente. OWASP Dependency-Check
+        identifica el binario por las coordenadas/nombre de Axis 1.4
+        original, por lo que sigue reportando esta CVE para el fork.
+        Ver evidencia en docs/security/axis-1.4-patched.md.
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/legacy\.apia/axis@.*$</packageUrl>
+        <cve>CVE-2023-40743</cve>
+        <cve>CVE-2019-0227</cve>
+        <cve>CVE-2018-8032</cve>
+        <cve>CVE-2012-5784</cve>
+        <cve>CVE-2014-3596</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        Axis 1.4 fue parcheado internamente. Regla alternativa por GAV
+        para ejecuciones donde Dependency-Check no expone packageUrl.
+        Ver evidencia en docs/security/axis-1.4-patched.md.
+        ]]></notes>
+        <gav regex="true">.*:axis.*:.*</gav>
+        <cve>CVE-2023-40743</cve>
+        <cve>CVE-2019-0227</cve>
+        <cve>CVE-2018-8032</cve>
+        <cve>CVE-2012-5784</cve>
+        <cve>CVE-2014-3596</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        Falso positivo de CPE: Dependency-Check asocia axis-tools
+        con LINE (line:line), un producto Android/iOS no relacionado.
+        Ver evidencia en docs/security/axis-1.4-patched.md.
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/io\.github\.gferrariuy/axis-tools@.*$</packageUrl>
+        <cve>CVE-2015-0897</cve>
+    </suppress>
+</suppressions>

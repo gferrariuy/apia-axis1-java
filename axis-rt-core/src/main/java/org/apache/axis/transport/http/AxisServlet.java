@@ -483,13 +483,13 @@ public class AxisServlet extends AxisServletBase {
             StringBuffer sb = new StringBuffer();
             sb.append("<li>");
             String name = sd.getName();
-            sb.append(name);
+            sb.append(XMLUtils.xmlEncodeString(name));
             sb.append(" <a href=\"");
             String endpointURL = sd.getEndpointURL();
             String baseURL = (endpointURL == null) ? defaultBaseURL :
                              endpointURL;
-            sb.append(baseURL);
-            sb.append(name);
+            sb.append(XMLUtils.xmlEncodeString(baseURL));
+            sb.append(XMLUtils.xmlEncodeString(name));
             sb.append("?wsdl\"><i>(wsdl)</i></a></li>");
             writer.println(sb.toString());
             ArrayList operations = sd.getOperations();
@@ -497,7 +497,7 @@ public class AxisServlet extends AxisServletBase {
                 writer.println("<ul>");
                 for (Iterator it = operations.iterator(); it.hasNext(); ) {
                     OperationDesc desc = (OperationDesc) it.next();
-                    writer.println("<li>" + desc.getName());
+                    writer.println("<li>" + XMLUtils.xmlEncodeString(desc.getName()));
                 }
                 writer.println("</ul>");
             }
