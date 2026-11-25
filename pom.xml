@@ -28,7 +28,7 @@
     <artifactId>axis1-maintained-project</artifactId>
     <name>Axis</name>
     <description>Maintained fork of Apache Axis 1.x with compatible org.apache.axis packages and updated Maven coordinates.</description>
-    <version>1.4.1.1</version>
+    <version>1.4.1.2</version>
     <packaging>pom</packaging>
     <url>${baseUrl}/</url>
     <licenses>

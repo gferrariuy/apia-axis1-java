@@ -22,7 +22,7 @@
     <parent>
         <groupId>io.github.gferrariuy</groupId>
         <artifactId>axis1-maintained-project</artifactId>
-        <version>1.4.1.1</version>
+        <version>1.4.1.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>axis-rt-databinding-xmlbeans</artifactId>
