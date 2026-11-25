@@ -58,7 +58,15 @@ public final class ClassUtils {
      */
     public static Class forName(String className)
             throws ClassNotFoundException {
-        return loadClass(className);
+        return loadClass(className, true);
+    }
+
+    /**
+     * Loads a class, optionally deferring its static initialization.
+     */
+    public static Class forName(String className, boolean initialize)
+            throws ClassNotFoundException {
+        return loadClass(className, initialize);
     }
 
     /**
@@ -72,7 +80,7 @@ public final class ClassUtils {
      * @throws ClassNotFoundException if the class is not found
      */
     public static Class forName(
-            String _className, boolean init, ClassLoader _loader)
+            String _className, final boolean init, ClassLoader _loader)
             throws ClassNotFoundException {
         
         // Create final vars for doPrivileged block
@@ -85,7 +93,7 @@ public final class ClassUtils {
                     new PrivilegedAction() {
                         public Object run() {
                             try {
-                                return Class.forName(className, true, loader);
+                                return Class.forName(className, init, loader);
                             } catch (Throwable e) {
                                 return e;
                             }
@@ -100,7 +108,7 @@ public final class ClassUtils {
                 throw new ClassNotFoundException(_className);
             }
         } catch (ClassNotFoundException cnfe) {
-            return loadClass(className);
+            return loadClass(className, init);
         }
     }
 
@@ -109,10 +117,11 @@ public final class ClassUtils {
      * getDefaultClassLoader().forName
      *
      * @param _className Class name
+     * @param initialize whether to initialize the class
      * @return java class
      * @throws ClassNotFoundException if the class is not found
      */
-    private static Class loadClass(String _className)
+    private static Class loadClass(String _className, final boolean initialize)
             throws ClassNotFoundException {
         // Create final vars for doPrivileged block
         final String className = _className;
@@ -126,13 +135,13 @@ public final class ClassUtils {
                                 // Try the context class loader
                                 ClassLoader classLoader =
                                     Thread.currentThread().getContextClassLoader();
-                                return Class.forName(className, true, classLoader);
+                                return Class.forName(className, initialize, classLoader);
                             } catch (ClassNotFoundException cnfe2) {
                                 try {
                                     // Try the classloader that loaded this class.
                                     ClassLoader classLoader =
                                         ClassUtils.class.getClassLoader();
-                                    return Class.forName(className, true, classLoader);
+                                    return Class.forName(className, initialize, classLoader);
                                 } catch (ClassNotFoundException cnfe3) {
                                     // Try the default class loader.
                                     try {

@@ -161,15 +161,16 @@ public class SOAPFaultBuilder extends SOAPHandler implements Callback
                     } else {
                         // We need to create the exception,
                         // passing the data to the constructor.
-                        Class argClass = ConvertWrapper(faultData.getClass());
-                        try {
-                            Constructor con =
-                                    faultClass.getConstructor(
-                                            new Class[] { argClass });
-                            f = (AxisFault) con.newInstance(new Object[] { faultData });
-                        } catch(Exception e){
-                            // Don't do anything here, since a problem above means
-                            // we'll just fall through and use a plain AxisFault.
+                        if (AxisFault.class.isAssignableFrom(faultClass)) {
+                            Class argClass = ConvertWrapper(faultData.getClass());
+                            try {
+                                Constructor con =
+                                        faultClass.getConstructor(
+                                                new Class[] { argClass });
+                                f = (AxisFault) con.newInstance(new Object[] { faultData });
+                            } catch (Exception e) {
+                                // Fall through and use a plain AxisFault.
+                            }
                         }
                         if (f == null && faultData instanceof Exception) {
                             f = AxisFault.makeFault((Exception)faultData);    

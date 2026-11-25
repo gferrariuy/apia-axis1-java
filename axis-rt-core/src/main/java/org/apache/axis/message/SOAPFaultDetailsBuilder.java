@@ -180,8 +180,12 @@ public class SOAPFaultDetailsBuilder extends SOAPHandler implements Callback
         } else if ("exceptionName".equals(hint)) {
             String faultClassName = (String) value;
             try {
-                Class faultClass = ClassUtils.forName(faultClassName);
-                builder.setFaultClass(faultClass);
+                // The name comes from the inbound message. Check its type
+                // without running the class's static initializer.
+                Class faultClass = ClassUtils.forName(faultClassName, false);
+                if (AxisFault.class.isAssignableFrom(faultClass)) {
+                    builder.setFaultClass(faultClass);
+                }
             } catch (ClassNotFoundException e) {
                 // Just create an AxisFault, no custom exception
             }
