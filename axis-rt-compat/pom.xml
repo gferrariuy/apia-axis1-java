@@ -31,6 +31,11 @@
         Contains deprecated classes that are required for compatibility with older Axis versions.
     </description>
     <url>${baseUrl}/compat</url>
+    <properties>
+        <!-- The legacy org.apache.axis.enum package predates the enum keyword. -->
+        <maven.compiler.source>1.4</maven.compiler.source>
+        <maven.compiler.target>1.4</maven.compiler.target>
+    </properties>
     <distributionManagement>
         <site>
             <id>axis</id>

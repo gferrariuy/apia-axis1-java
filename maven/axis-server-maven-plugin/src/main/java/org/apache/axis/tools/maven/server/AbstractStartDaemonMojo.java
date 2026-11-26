@@ -167,6 +167,13 @@ public abstract class AbstractStartDaemonMojo extends AbstractDaemonControlMojo 
      * @readonly
      */
     private String axisVersion;
+
+    /**
+     * @parameter default-value="${plugin.groupId}"
+     * @required
+     * @readonly
+     */
+    private String axisGroupId;
     
     private final Set/*<Artifact>*/ additionalDependencies = new HashSet();
     private List/*<File>*/ classpath;
@@ -183,7 +190,7 @@ public abstract class AbstractStartDaemonMojo extends AbstractDaemonControlMojo 
     }
     
     protected final void addAxisDependency(String artifactId) {
-        addDependency("org.apache.axis", artifactId, axisVersion);
+        addDependency(axisGroupId, artifactId, axisVersion);
     }
     
     protected final List/*<File>*/ getClasspath() throws ProjectBuildingException, InvalidDependencyVersionException, ArtifactResolutionException, ArtifactNotFoundException {

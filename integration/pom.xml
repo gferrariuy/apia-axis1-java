@@ -27,6 +27,11 @@
     </parent>
     <artifactId>integration</artifactId>
     <name>Axis :: Integration tests</name>
+    <properties>
+        <!-- The legacy WSDL fixtures generate test sources using enum as an identifier. -->
+        <maven.compiler.testSource>1.4</maven.compiler.testSource>
+        <maven.compiler.testTarget>1.4</maven.compiler.testTarget>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

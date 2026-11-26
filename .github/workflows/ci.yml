@@ -47,6 +47,18 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: ${{ matrix.java }}
+    - name: Set up Maven 3.9.11
+      shell: bash
+      run: |
+        # The integration-test policy does not allow Maven 3.10 to read user extensions.
+        maven_dir="$(mktemp -d "$RUNNER_TEMP/maven.XXXXXX")"
+        cd "$maven_dir"
+        archive=apache-maven-3.9.11-bin.tar.gz
+        curl --fail --silent --show-error --location --retry 3 \
+          --output "$archive" "https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.11/$archive"
+        echo "bcfe4fe305c962ace56ac7b5fc7a08b87d5abd8b7e89027ab251069faebee516b0ded8961445d6d91ec1985dfe30f8153268843c89aa392733d1a3ec956c9978  $archive" | sha512sum --check
+        tar -xzf "$archive"
+        echo "$maven_dir/apache-maven-3.9.11/bin" >> "$GITHUB_PATH"
     - name: Build
       run: mvn -B -e -Papache-release -Dgpg.skip=true install site
     - name: Remove Snapshots
